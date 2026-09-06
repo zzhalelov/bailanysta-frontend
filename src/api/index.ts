@@ -2,6 +2,7 @@ import {Post, Comment} from '../types';
 
 // Использование относительного пути '/api' по умолчанию для работы через Nginx на VPS
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+console.log('Текущий API_BASE_URL:', API_BASE_URL);
 
 export const api = {
     // Получить все посты или выполнить поиск
