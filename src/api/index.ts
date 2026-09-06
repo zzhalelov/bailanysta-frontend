@@ -1,7 +1,7 @@
 import {Post, Comment} from '../types';
 
-// Замени URL на адрес твоего VPS при деплое (например, 'http://YOUR_VPS_IP:8080/api')
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+// Использование относительного пути '/api' по умолчанию для работы через Nginx на VPS
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const api = {
     // Получить все посты или выполнить поиск
@@ -54,7 +54,10 @@ export const api = {
 
     // Сгенерировать пост с помощью Gemini через бэкенд
     async generateAiContent(topic: string): Promise<string> {
-        const res = await fetch(`${API_BASE_URL}/posts/ai-generate`, {
+        // Убедитесь, что маршрут совпадает с контроллером Spring Boot:
+        // Если в контроллере @RequestMapping("/api/ai"), используйте '/ai/generate'
+        // Если в контроллере @RequestMapping("/api/posts"), используйте '/posts/ai-generate'
+        const res = await fetch(`${API_BASE_URL}/ai/generate`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({topic}),
@@ -71,7 +74,7 @@ export const api = {
         return res.json();
     },
 
-// Переключить статус подписки
+    // Переключить статус подписки
     async toggleSubscription(follower: string, following: string): Promise<{ subscribed: boolean }> {
         const res = await fetch(`${API_BASE_URL}/posts/subscriptions/toggle`, {
             method: 'POST',
@@ -82,7 +85,7 @@ export const api = {
         return res.json();
     },
 
-// Статус подписки
+    // Статус подписки
     async getSubscriptionStatus(follower: string, following: string): Promise<{ subscribed: boolean }> {
         const res = await fetch(
             `${API_BASE_URL}/posts/subscriptions/status?follower=${encodeURIComponent(follower)}&following=${encodeURIComponent(following)}`
@@ -91,6 +94,7 @@ export const api = {
         return res.json();
     },
 
+    // Удалить пост
     async deletePost(id: number, author: string): Promise<void> {
         const res = await fetch(
             `${API_BASE_URL}/posts/${id}?author=${encodeURIComponent(author)}`,
