@@ -54,10 +54,7 @@ export const api = {
 
     // Сгенерировать пост с помощью Gemini через бэкенд
     async generateAiContent(topic: string): Promise<string> {
-        // Убедитесь, что маршрут совпадает с контроллером Spring Boot:
-        // Если в контроллере @RequestMapping("/api/ai"), используйте '/ai/generate'
-        // Если в контроллере @RequestMapping("/api/posts"), используйте '/posts/ai-generate'
-        const res = await fetch(`${API_BASE_URL}/ai/generate`, {
+        const res = await fetch(`${API_BASE_URL}/posts/ai-generate`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({topic}),
